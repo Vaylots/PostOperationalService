@@ -8,8 +8,6 @@ load_dotenv()
 scheduler = Scheduler()
 bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
 
-фынтс
-
 async def send_notification():
     chat_id = os.getenv('CHAT_ID')
     with open("schedule.jpg", "rb") as file:
