@@ -2,13 +2,13 @@ import os
 import time
 import asyncio
 from dotenv import load_dotenv
-from telegram import Update, Bot
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
+from telegram import Bot
+from Scheduler import Scheduler
 load_dotenv()
-scheduler = AsyncIOScheduler()
+scheduler = Scheduler()
 bot = Bot(token=os.getenv('TELEGRAM_BOT_TOKEN'))
+
+фынтс
 
 async def send_notification():
     chat_id = os.getenv('CHAT_ID')
@@ -16,41 +16,19 @@ async def send_notification():
         await bot.send_message(chat_id=chat_id, text="Пора закапать капли! Вот твой график:")
         await bot.send_photo(chat_id=chat_id, photo=file)
     await asyncio.sleep(10)
-
-async def main():
-    scheduler = AsyncIOScheduler()
-
-    # 09:00
-    scheduler.add_job(
-        send_notification,
-        "cron",
-        hour=9,
-        minute=0
-    )
-
-    # 13:30
-    scheduler.add_job(
-        send_notification,
-        "cron",
-        hour=13,
-        minute=30
-    )
-
-    # 18:00
-    scheduler.add_job(
-        send_notification,
-        "cron",
-        hour=18,
-        minute=0
-    )
-
-    # 22:30
-    scheduler.add_job(
-        send_notification,
-        "cron",
-        hour=22,
-        minute=30
-    )
+    
+async def check_schedule() -> None:
+    
+    pass
+   
+async def main() -> None:
+    times = [
+        {"hour": 9, "minute": 0},
+        {"hour": 13, "minute": 30},
+        {"hour": 18, "minute": 0},
+        {"hour": 22, "minute": 30},
+    ]
+    scheduler.add_jobs(send_notification, times)
     
     scheduler.start()
 
@@ -66,13 +44,3 @@ if __name__ == "__main__":
 
 
 
-# from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-# scheduler = AsyncIOScheduler()
-
-# scheduler.add_job(send_message, "cron", hour=9, minute=0)
-# scheduler.add_job(send_message, "cron", hour=13, minute=30)
-# scheduler.add_job(send_message, "cron", hour=18, minute=0)
-# scheduler.add_job(send_message, "cron", hour=22, minute=30)
-
-# scheduler.start()
